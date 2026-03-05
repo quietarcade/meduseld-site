@@ -200,7 +200,7 @@
       
     } catch (error) {
       // Server is offline or unreachable
-      button.innerHTML = '🔴 Server Offline';
+      button.innerHTML = 'Server Offline';
       button.classList.remove('btn-secondary', 'btn-warning');
       button.classList.add('btn-danger');
       button.setAttribute('disabled', 'true');
@@ -212,7 +212,7 @@
       
       // Update description when offline
       document.getElementById('game-description').textContent = 
-        'Use the Discord button on this page to report a problem to the server channel.';
+        'Server is not currently online. Use the Discord button on this page to report a problem to the server channel.';
     }
   }
   
