@@ -314,8 +314,8 @@
           return `
             <div class="news-item mb-3 pb-3 border-bottom border-secondary">
               <div class="d-flex justify-content-between align-items-start mb-2">
-                <h5 class="mb-0" style="color:#e6c65c;">${item.title}</h5>
-                <small class="text-muted">${date}</small>
+                <h5 class="mb-0 flex-grow-1" style="color:#e6c65c;">${item.title}</h5>
+                <span class="badge bg-secondary ms-2 flex-shrink-0">${date}</span>
               </div>
               <p class="mb-2 text-light" style="font-size: 0.9rem;">${content}</p>
               <a href="${item.url}" target="_blank" class="btn btn-sm btn-outline-warning">
