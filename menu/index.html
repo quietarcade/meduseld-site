@@ -122,7 +122,8 @@
     </div>
   </div>
   <div class="text-center mt-5">
-    <a href="https://meduseld.io" class="btn btn-outline-warning">← Back to Landing</a>
+    <a href="https://meduseld.io" class="btn btn-outline-warning me-2">← Back to Landing</a>
+    <button class="btn btn-outline-secondary" id="changelog-button" data-bs-toggle="modal" data-bs-target="#changelogModal"><i class="bi bi-clock-history me-2"></i>Changelog</button>
   </div>
   <!-- Games Up Next -->
   <div class="row justify-content-center mt-5">
@@ -133,13 +134,13 @@
         </div>
         <div class="card-body">
           <div class="list-group list-group-flush bg-dark">
-            <div class="list-group-item bg-dark border-secondary d-flex align-items-center"><span class="badge bg-warning text-dark me-3" style="font-size: 1rem;">1</span><span class="text-light">Raft</span></div>
-            <div class="list-group-item bg-dark border-secondary d-flex align-items-center"><span class="badge bg-warning text-dark me-3" style="font-size: 1rem;">2</span><span class="text-light">Dawn of Defiance</span><i class="bi bi-info-circle ms-2 text-warning" style="cursor: pointer;" title="Playing this game depends on dedicated server support" data-bs-toggle="tooltip" data-bs-placement="top"></i></div>
-            <div class="list-group-item bg-dark border-secondary d-flex align-items-center"><span class="badge bg-warning text-dark me-3" style="font-size: 1rem;">3</span><span class="text-light">Soulmask</span></div>
-            <div class="list-group-item bg-dark border-secondary d-flex align-items-center"><span class="badge bg-warning text-dark me-3" style="font-size: 1rem;">4</span><span class="text-light">7 Days to Die</span></div>
-            <div class="list-group-item bg-dark border-secondary d-flex align-items-center"><span class="badge bg-warning text-dark me-3" style="font-size: 1rem;">5</span><span class="text-light">LOTR: Return to Moria</span></div>
-            <div class="list-group-item bg-dark border-secondary d-flex align-items-center"><span class="badge bg-warning text-dark me-3" style="font-size: 1rem;">6</span><span class="text-light">Fellowship</span></div>
-            <div class="list-group-item bg-dark border-secondary d-flex align-items-center"><span class="badge bg-warning text-dark me-3" style="font-size: 1rem;">7</span><span class="text-light">VEIN</span></div>
+            <div class="list-group-item bg-dark border-secondary d-flex align-items-center"><span class="badge bg-warning text-dark me-3" style="font-size: 1rem;">1</span><a href="https://store.steampowered.com/app/648800/Raft/" target="_blank" class="text-warning text-decoration-none">Raft</a></div>
+            <div class="list-group-item bg-dark border-secondary d-flex align-items-center"><span class="badge bg-warning text-dark me-3" style="font-size: 1rem;">2</span><a href="https://store.steampowered.com/app/2613680/Dawn_of_Defiance/" target="_blank" class="text-warning text-decoration-none">Dawn of Defiance</a><i class="bi bi-info-circle ms-2 text-warning" style="cursor: pointer;" title="Playing this game depends on dedicated server support" data-bs-toggle="tooltip" data-bs-placement="top"></i></div>
+            <div class="list-group-item bg-dark border-secondary d-flex align-items-center"><span class="badge bg-warning text-dark me-3" style="font-size: 1rem;">3</span><a href="https://store.steampowered.com/app/2646460/Soulmask/" target="_blank" class="text-warning text-decoration-none">Soulmask</a></div>
+            <div class="list-group-item bg-dark border-secondary d-flex align-items-center"><span class="badge bg-warning text-dark me-3" style="font-size: 1rem;">4</span><a href="https://store.steampowered.com/app/251570/7_Days_to_Die/" target="_blank" class="text-warning text-decoration-none">7 Days to Die</a></div>
+            <div class="list-group-item bg-dark border-secondary d-flex align-items-center"><span class="badge bg-warning text-dark me-3" style="font-size: 1rem;">5</span><a href="https://store.steampowered.com/app/2933130/The_Lord_of_the_Rings_Return_to_Moria/" target="_blank" class="text-warning text-decoration-none">LOTR: Return to Moria</a></div>
+            <div class="list-group-item bg-dark border-secondary d-flex align-items-center"><span class="badge bg-warning text-dark me-3" style="font-size: 1rem;">6</span><a href="https://store.steampowered.com/app/2682140/Fellowship/" target="_blank" class="text-warning text-decoration-none">Fellowship</a></div>
+            <div class="list-group-item bg-dark border-secondary d-flex align-items-center"><span class="badge bg-warning text-dark me-3" style="font-size: 1rem;">7</span><a href="https://store.steampowered.com/app/1857090/VEIN/" target="_blank" class="text-warning text-decoration-none">VEIN</a></div>
           </div>
         </div>
       </div>
@@ -154,19 +155,44 @@
         </div>
         <div class="card-body">
           <div class="row g-3">
-            <div class="col-md-6"><div class="p-3 border border-secondary rounded"><h6 class="text-warning mb-2"><i class="bi bi-cpu me-2"></i>Processor</h6><p class="text-light mb-0">AMD Ryzen 7 5800XT</p></div></div>
+            <div class="col-md-6"><div class="p-3 border border-secondary rounded"><h6 class="text-warning mb-2"><i class="bi bi-cpu me-2"></i>Processor</h6><p class="text-light mb-0">AMD Ryzen 7 2700</p></div></div>
             <div class="col-md-6"><div class="p-3 border border-secondary rounded"><h6 class="text-warning mb-2"><i class="bi bi-memory me-2"></i>Memory</h6><p class="text-light mb-0">G.SKILL Ripjaws V 64GB DDR4 3600</p></div></div>
             <div class="col-md-6"><div class="p-3 border border-secondary rounded"><h6 class="text-warning mb-2"><i class="bi bi-gpu-card me-2"></i>Graphics</h6><p class="text-light mb-0">NVIDIA GeForce RTX 3060</p></div></div>
             <div class="col-md-6"><div class="p-3 border border-secondary rounded"><h6 class="text-warning mb-2"><i class="bi bi-device-hdd me-2"></i>Storage</h6><p class="text-light mb-0">SIX NVME M.2 SSD 1TB</p></div></div>
             <div class="col-md-6"><div class="p-3 border border-secondary rounded"><h6 class="text-warning mb-2"><i class="bi bi-pc-display-horizontal me-2"></i>Motherboard</h6><p class="text-light mb-0">GIGABYTE B550M K AMD AM4</p></div></div>
             <div class="col-md-6"><div class="p-3 border border-secondary rounded"><h6 class="text-warning mb-2"><i class="bi bi-droplet me-2"></i>Cooling</h6><p class="text-light mb-0">ARCTIC Liquid Freezer III Pro 240</p></div></div>
             <div class="col-md-6"><div class="p-3 border border-secondary rounded"><h6 class="text-warning mb-2"><i class="bi bi-box me-2"></i>Case</h6><p class="text-light mb-0">JONSBO Z20 Mini Tower</p></div></div>
-            <div class="col-md-6"><div class="p-3 border border-secondary rounded"><h6 class="text-warning mb-2"><i class="bi bi-ubuntu me-2"></i>Operating System</h6><p class="text-light mb-0">Ubuntu Server LTS (Latest)</p></div></div>
+            <div class="col-md-6"><div class="p-3 border border-secondary rounded"><h6 class="text-warning mb-2"><i class="bi bi-ubuntu me-2"></i>Operating System</h6><p class="text-light mb-0">Ubuntu Server LTS (24.04)</p></div></div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
+<!-- Changelog Modal -->
+<div class="modal fade" id="changelogModal" tabindex="-1" aria-labelledby="changelogModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-content bg-dark text-light border-warning">
+      <div class="modal-header" style="border-bottom: 2px solid #e6c65c;">
+        <h5 class="modal-title" id="changelogModalLabel" style="color:#e6c65c;"><i class="bi bi-clock-history me-2"></i>Site Changelog</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="changelog-content">
+        <div class="text-center py-4">
+          <i class="bi bi-hourglass-split text-warning" style="font-size: 3rem;"></i>
+          <p class="mt-3 text-muted">Changelog coming soon!</p>
+          <small class="text-muted">Updates to meduseld.io and related services will be tracked here.</small>
+        </div>
+      </div>
+      <div class="modal-footer" style="border-top: 1px solid rgba(230, 198, 92, 0.2);">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Discord Tooltip -->
+<div class="discord-tooltip" id="discord-tooltip">
+  <i class="bi bi-chat-left-text-fill me-2"></i>Server suggestion or problem? Send a discord message!
 </div>
 <footer class="text-center py-3 mt-5" style="border-top: 1px solid rgba(230, 198, 92, 0.2);">
   <p class="text-light mb-0" style="font-size: 0.85rem;">&copy; <span id="copyright-year"></span> <a href="https://github.com/quietarcade" target="_blank" class="text-warning text-decoration-none">quietarcade</a>. All rights reserved.</p>
@@ -185,6 +211,9 @@
 #news-container::-webkit-scrollbar-thumb:hover{background:#d4b34a}
 .card-header[data-bs-toggle="collapse"]:hover{background-color:rgba(230,198,92,.15)!important}
 .collapse.show~.card-header #news-chevron{transform:rotate(180deg)}
+.discord-tooltip{position:fixed;bottom:80px;right:20px;background:#e6c65c;color:#000;padding:12px 16px;border-radius:8px;font-size:0.9rem;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,.3);z-index:9999;max-width:250px;animation:fadeInBounce 0.5s ease-out}
+.discord-tooltip::after{content:'';position:absolute;bottom:-8px;right:20px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:8px solid #e6c65c}
+@keyframes fadeInBounce{0%{opacity:0;transform:translateY(20px)}60%{opacity:1;transform:translateY(-5px)}100%{opacity:1;transform:translateY(0)}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -197,6 +226,7 @@ async function fetchGameNews(){const newsContainer=document.getElementById('news
 document.addEventListener('DOMContentLoaded',function(){document.getElementById('game-name').textContent=`${CONFIG.gameName} Server`;document.getElementById('game-description').textContent=`Control the ${CONFIG.gameName} dedicated game server. Start, stop, restart, and monitor server status.`;document.getElementById('wiki-title').textContent=`${CONFIG.gameName} Wiki`;document.getElementById('wiki-description').textContent=`Community wiki with guides, tips, and information for ${CONFIG.gameName}.`;document.getElementById('news-game-title').textContent=`${CONFIG.gameName} News`;document.getElementById('copyright-year').textContent=new Date().getFullYear();fetchGameNews();const tooltipTriggerList=[].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));tooltipTriggerList.map(function(tooltipTriggerEl){return new bootstrap.Tooltip(tooltipTriggerEl,{trigger:'click hover'})})});
 document.getElementById('newsCollapse').addEventListener('show.bs.collapse',function(){document.getElementById('news-chevron').style.transform='rotate(180deg)'});
 document.getElementById('newsCollapse').addEventListener('hide.bs.collapse',function(){document.getElementById('news-chevron').style.transform='rotate(0deg)'});
+setTimeout(function(){const tooltip=document.getElementById('discord-tooltip');if(tooltip){tooltip.style.display='block';setTimeout(function(){tooltip.style.opacity='0';tooltip.style.transition='opacity 0.5s ease-out';setTimeout(function(){tooltip.style.display='none'},500)},8000)}},3000);
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3" async defer>
 const crate=new Crate({server:'924788704529252353',channel:'1474674474036232204',color:'#e6c65c'})
