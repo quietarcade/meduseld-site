@@ -19,19 +19,74 @@ v0.1.0-alpha - Initial release
 ## Services
 
 ### Game Server Panel
+
 Control and monitor the current game server (Icarus). Start, stop, restart, and check server status with real-time player count.
 
 ### Jellyfin Media Server
+
 Stream movies, TV shows, and other media content through the Jellyfin server.
 
 ### SSH Access
+
 Secure shell access to the server via web-based terminal.
 
 ### Coming Soon
+
 - VPN Access (OpenVPN)
 - Game Wiki
 - Trivia Game
 - Hall of Fame
+
+## Making Changes
+
+To contribute or modify the site:
+
+### 1. Clone the Repo
+
+```bash
+git clone <repo-url>
+cd meduseld-site
+```
+
+### 2. Create a New Branch
+
+```bash
+git checkout -b feature/your-feature-name
+```
+
+### 3. Make Your Changes
+
+Edit files as needed:
+
+- `menu/index.html` - Main menu page
+- `static/` - Static assets
+
+### 4. Commit and Push Your Branch
+
+```bash
+git add .
+git commit -m "Description of what you changed"
+git push -u origin feature/your-feature-name
+```
+
+### 5. Open a Pull Request
+
+- Go to the GitHub repository
+- Click "Compare & pull request" for your branch
+- Add a description of your changes
+- Submit the PR for review
+
+### 6. Deploy to Server (After PR is Merged)
+
+SSH into the server and pull the changes:
+
+```bash
+ssh vertebra@meduseld.io
+cd ~/services/meduseld-site
+git pull
+```
+
+Changes are live immediately (static site).
 
 ## Configuration
 
@@ -44,13 +99,14 @@ const CONFIG = {
   panelUrl: 'https://panel.meduseld.io',
   sshUrl: 'https://ssh.meduseld.io',
   jellyfinUrl: 'https://jellyfin.meduseld.io',
-  healthApiUrl: 'https://meduseld-health.404-41f.workers.dev'
+  healthApiUrl: 'https://meduseld-health.404-41f.workers.dev',
 };
 ```
 
 ## Status Monitoring
 
 Services perform automatic health checks every 5 seconds via Cloudflare Worker, detecting:
+
 - Service availability (green/red)
 - Cloudflare tunnel status (orange if tunnel down)
 - Real-time updates without page refresh
