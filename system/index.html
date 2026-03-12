@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="icon" type="image/x-icon" href="https://meduseld.io/static/favicon.ico" />
+    <meta charset="UTF-8" />
+    <title>System Monitor - Meduseld</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link rel="stylesheet" href="https://meduseld.io/static/style.css" />
+  </head>
+  <body class="bg-dark text-light">
+    <div class="container py-5">
+      <div class="text-center mb-5">
+        <img
+          src="https://meduseld.io/static/logo.png"
+          style="max-height: 100px; margin-bottom: 20px"
+        />
+        <h1 style="color: #e6c65c; font-weight: 600">System Monitor</h1>
+        <p style="opacity: 0.8">Server logs and system diagnostics</p>
+      </div>
+
+      <!-- Server Logs Panel -->
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <div class="card bg-dark border-danger">
+            <div
+              class="card-header d-flex justify-content-between align-items-center"
+              style="background-color: rgba(220, 53, 69, 0.1); border-bottom: 2px solid #dc3545"
+            >
+              <h4 class="mb-0" style="color: #dc3545">
+                <i class="bi bi-terminal me-2"></i>
+                Server Logs
+              </h4>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-secondary" id="logs-status">Loading...</span>
+                <button
+                  id="refresh-logs-btn"
+                  class="btn btn-sm btn-outline-danger"
+                  onclick="fetchServerLogs()"
+                  title="Refresh logs"
+                  style="padding: 0.25rem 0.5rem"
+                >
+                  <i class="bi bi-arrow-clockwise"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div
+                id="logs-container"
+                style="
+                  max-height: 600px;
+                  overflow-y: auto;
+                  background-color: #1a1a1a;
+                  font-family: 'Courier New', monospace;
+                  font-size: 0.85rem;
+                  padding: 15px;
+                  border-radius: 5px;
+                "
+              >
+                <div class="text-center py-4">
+                  <div class="spinner-border text-danger" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                  <p class="mt-2 text-muted">Loading server logs...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-5">
+        <a href="https://menu.meduseld.io" class="btn btn-outline-warning">← Back to Menu</a>
+      </div>
+    </div>
+
+    <!-- Help Button -->
+    <button
+      id="help-button"
+      class="btn btn-warning position-fixed"
+      style="
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        box-shadow: 0 4px 12px rgba(230, 198, 92, 0.4);
+        z-index: 1000;
+      "
+      data-bs-toggle="modal"
+      data-bs-target="#helpModal"
+      title="Linux Commands Help"
+    >
+      <i class="bi bi-question-circle" style="font-size: 1.8rem"></i>
+    </button>
+
+    <!-- Help Modal -->
+    <div
+      class="modal fade"
+      id="helpModal"
+      tabindex="-1"
+      aria-labelledby="helpModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content bg-dark text-light border-warning">
+          <div class="modal-header" style="border-bottom: 2px solid #e6c65c">
+            <h5 class="modal-title" id="helpModalLabel" style="color: #e6c65c">
+              <i class="bi bi-terminal me-2"></i>
+              Linux Commands Cheat Sheet
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p class="text-muted mb-4">
+              Quick reference for managing the game server directory at
+              <code>/srv/games/icarus</code>
+            </p>
+
+            <div class="mb-4">
+              <h6 class="text-warning mb-3">
+                <i class="bi bi-folder me-2"></i>
+                Navigation
+              </h6>
+              <div class="command-item mb-2">
+                <code class="text-info">cd /srv/games/icarus</code>
+                <p class="text-muted mb-0 ms-3">Go to game server directory</p>
+              </div>
+              <div class="command-item mb-2">
+                <code class="text-info">ls -lah</code>
+                <p class="text-muted mb-0 ms-3">List all files with details and sizes</p>
+              </div>
+              <div class="command-item mb-2">
+                <code class="text-info">pwd</code>
+                <p class="text-muted mb-0 ms-3">Show current directory path</p>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <h6 class="text-warning mb-3">
+                <i class="bi bi-file-earmark-text me-2"></i>
+                File Operations
+              </h6>
+              <div class="command-item mb-2">
+                <code class="text-info">cat filename.txt</code>
+                <p class="text-muted mb-0 ms-3">View file contents</p>
+              </div>
+              <div class="command-item mb-2">
+                <code class="text-info">tail -f logfile.log</code>
+                <p class="text-muted mb-0 ms-3">Watch log file in real-time (Ctrl+C to exit)</p>
+              </div>
+              <div class="command-item mb-2">
+                <code class="text-info">grep "error" logfile.log</code>
+                <p class="text-muted mb-0 ms-3">Search for "error" in log file</p>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <h6 class="text-warning mb-3">
+                <i class="bi bi-hdd me-2"></i>
+                Disk Usage
+              </h6>
+              <div class="command-item mb-2">
+                <code class="text-info">du -sh *</code>
+                <p class="text-muted mb-0 ms-3">Show size of each folder/file</p>
+              </div>
+              <div class="command-item mb-2">
+                <code class="text-info">df -h</code>
+                <p class="text-muted mb-0 ms-3">Show disk space usage</p>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <h6 class="text-warning mb-3">
+                <i class="bi bi-cpu me-2"></i>
+                Process Management
+              </h6>
+              <div class="command-item mb-2">
+                <code class="text-info">ps aux | grep icarus</code>
+                <p class="text-muted mb-0 ms-3">Find Icarus server processes</p>
+              </div>
+              <div class="command-item mb-2">
+                <code class="text-info">top</code>
+                <p class="text-muted mb-0 ms-3">View system resources (q to quit)</p>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <h6 class="text-warning mb-3">
+                <i class="bi bi-shield-check me-2"></i>
+                Permissions
+              </h6>
+              <div class="command-item mb-2">
+                <code class="text-info">ls -l</code>
+                <p class="text-muted mb-0 ms-3">View file permissions</p>
+              </div>
+              <div class="command-item mb-2">
+                <code class="text-info">chmod +x script.sh</code>
+                <p class="text-muted mb-0 ms-3">Make script executable</p>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <h6 class="text-warning mb-3">
+                <i class="bi bi-gear me-2"></i>
+                Server Configuration
+              </h6>
+              <div class="command-item mb-2">
+                <code class="text-info">
+                  nano Icarus/Saved/Config/WindowsServer/ServerSettings.ini
+                </code>
+                <p class="text-muted mb-0 ms-3">Edit server settings (Ctrl+X to save and exit)</p>
+              </div>
+              <div class="command-item mb-2">
+                <code class="text-info">nano start.sh</code>
+                <p class="text-muted mb-0 ms-3">Edit server startup script</p>
+              </div>
+              <div
+                class="mt-3 p-3"
+                style="background-color: rgba(230, 198, 92, 0.1); border-radius: 5px"
+              >
+                <p class="mb-2"><strong>About start.sh:</strong></p>
+                <ul class="text-muted mb-0" style="font-size: 0.9rem">
+                  <li>Launches Icarus server using Wine/Proton compatibility layer</li>
+                  <li>Manages tmux session for background server operation</li>
+                  <li>Checks for existing server processes to prevent duplicates</li>
+                  <li>Logs startup information for troubleshooting</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="alert alert-warning" role="alert">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              <strong>Caution:</strong>
+              Be careful with commands that modify or delete files. Always double-check before
+              running destructive operations.
+            </div>
+          </div>
+          <div class="modal-footer" style="border-top: 1px solid rgba(230, 198, 92, 0.2)">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="text-center py-3 mt-5" style="border-top: 1px solid rgba(230, 198, 92, 0.2)">
+      <p class="text-light mb-0" style="font-size: 0.85rem">
+        &copy;
+        <span id="copyright-year"></span>
+        <a
+          href="https://github.com/quietarcade"
+          target="_blank"
+          class="text-warning text-decoration-none"
+        >
+          quietarcade
+        </a>
+        . All rights reserved.
+      </p>
+    </footer>
+
+    <style>
+      #logs-container::-webkit-scrollbar {
+        width: 8px;
+      }
+      #logs-container::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.2);
+      }
+      #logs-container::-webkit-scrollbar-thumb {
+        background: #dc3545;
+        border-radius: 4px;
+      }
+      #logs-container::-webkit-scrollbar-thumb:hover {
+        background: #c82333;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      #help-button {
+        transition: all 0.3s ease;
+      }
+      #help-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(230, 198, 92, 0.6);
+      }
+      .command-item code {
+        background-color: rgba(230, 198, 92, 0.1);
+        padding: 4px 8px;
+        border-radius: 4px;
+        display: inline-block;
+        font-size: 0.9rem;
+      }
+      .modal-body::-webkit-scrollbar {
+        width: 8px;
+      }
+      .modal-body::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.2);
+      }
+      .modal-body::-webkit-scrollbar-thumb {
+        background: #e6c65c;
+        border-radius: 4px;
+      }
+      .modal-body::-webkit-scrollbar-thumb:hover {
+        background: #d4b34a;
+      }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const CONFIG = {
+        panelUrl: 'https://panel.meduseld.io',
+      };
+
+      async function fetchServerLogs() {
+        const refreshBtn = document.getElementById('refresh-logs-btn');
+        const logsContainer = document.getElementById('logs-container');
+        const logsStatus = document.getElementById('logs-status');
+
+        if (refreshBtn) {
+          refreshBtn.disabled = true;
+          refreshBtn.innerHTML =
+            '<i class="bi bi-arrow-clockwise" style="animation: spin 1s linear infinite;"></i>';
+        }
+
+        logsContainer.innerHTML =
+          '<div class="text-center py-4"><div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2 text-muted">Loading server logs...</p></div>';
+
+        try {
+          const response = await fetch(CONFIG.panelUrl + '/api/server-logs?lines=100');
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+
+          const data = await response.json();
+
+          if (data.logs && data.logs.length > 0) {
+            logsContainer.innerHTML = data.logs
+              .map((line) => {
+                let colorClass = 'text-light';
+                if (line.includes('ERROR') || line.includes('Error')) {
+                  colorClass = 'text-danger';
+                } else if (line.includes('WARNING') || line.includes('Warning')) {
+                  colorClass = 'text-warning';
+                } else if (line.includes('INFO') || line.includes('Display:')) {
+                  colorClass = 'text-info';
+                }
+                return `<div class="${colorClass}" style="white-space: pre-wrap; word-break: break-all; margin-bottom: 2px;">${line}</div>`;
+              })
+              .join('');
+            logsStatus.textContent = `${data.logs.length} lines`;
+            logsStatus.classList.remove('bg-danger', 'bg-secondary');
+            logsStatus.classList.add('bg-success');
+
+            // Auto-scroll to bottom
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+          } else {
+            logsContainer.innerHTML = '<p class="text-muted text-center">No logs available</p>';
+            logsStatus.textContent = 'No logs';
+            logsStatus.classList.remove('bg-success', 'bg-danger');
+            logsStatus.classList.add('bg-secondary');
+          }
+        } catch (error) {
+          console.error('Error fetching logs:', error);
+          logsContainer.innerHTML = `<div class="text-center text-danger"><i class="bi bi-exclamation-triangle" style="font-size: 2rem;"></i><p class="mt-2">Unable to load server logs</p><small>${error.message}</small></div>`;
+          logsStatus.textContent = 'Error';
+          logsStatus.classList.remove('bg-success', 'bg-secondary');
+          logsStatus.classList.add('bg-danger');
+        }
+
+        if (refreshBtn) {
+          refreshBtn.disabled = false;
+          refreshBtn.innerHTML = '<i class="bi bi-arrow-clockwise"></i>';
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('copyright-year').textContent = new Date().getFullYear();
+        fetchServerLogs();
+
+        // Auto-refresh every 30 seconds
+        setInterval(fetchServerLogs, 30000);
+      });
+    </script>
+  </body>
+</html>

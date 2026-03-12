@@ -241,16 +241,26 @@
             </div>
           </div>
         </div>
-        <!-- More Services -->
+        <!-- System Monitor -->
         <div class="col-md-6 col-lg-4">
-          <div class="card h-100 text-white bg-dark border-secondary disabled-card">
+          <div class="card h-100 text-white bg-dark border-warning service-card">
             <div class="card-body d-flex flex-column text-center p-4">
-              <div class="mb-3"><i class="bi bi-gear" style="font-size: 3rem"></i></div>
-              <h3 class="card-title mb-3 text-secondary">More Services</h3>
+              <div class="mb-3">
+                <i class="bi bi-hdd-rack" style="font-size: 3rem; color: #e6c65c"></i>
+              </div>
+              <h3 class="card-title mb-3" style="color: #e6c65c">System Monitor</h3>
+              <div class="mb-2">
+                <span class="badge bg-success">
+                  <i class="bi bi-circle-fill status-online me-1"></i>
+                  Active
+                </span>
+              </div>
               <p class="card-text mb-4 flex-grow-1">
-                Additional services will be added here as we expand.
+                View server logs, system diagnostics, and monitor server health.
               </p>
-              <button class="btn btn-secondary btn-lg" disabled>Coming Soon</button>
+              <a href="https://system.meduseld.io" class="btn btn-warning btn-lg">
+                Open System Monitor
+              </a>
             </div>
           </div>
         </div>
@@ -589,21 +599,13 @@
       <p class="text-light mb-0" style="font-size: 0.85rem">
         &copy;
         <span id="copyright-year"></span>
-        <a
-          href="https://github.com/quietarcade"
-          target="_blank"
-          class="text-warning text-decoration-none"
-        >
+        <a href="https://quietarca.de" target="_blank" class="text-warning text-decoration-none">
           quietarcade
         </a>
         . All rights reserved.
       </p>
       <p class="text-muted mb-0" style="font-size: 0.75rem">
-        <a
-          href="https://github.com/quietarcade/meduseld"
-          target="_blank"
-          class="text-muted text-decoration-none"
-        >
+        <a href="https://quietarca.de" target="_blank" class="text-muted text-decoration-none">
           v0.1.0-alpha
         </a>
       </p>
@@ -1150,7 +1152,9 @@
 
               if (age < CACHE_DURATION) {
                 // Use cached data
-                console.log('Using cached game prices');
+                console.log(
+                  `Using cached game prices (${Math.floor(age / 1000 / 60 / 60)} hours old)`
+                );
                 for (const el of priceElements) {
                   const appId = el.getAttribute('data-appid');
                   if (prices[appId]) {
@@ -1162,11 +1166,15 @@
                   refreshBtn.innerHTML = '<i class="bi bi-arrow-clockwise"></i>';
                 }
                 return;
+              } else {
+                console.log('Cache expired, fetching fresh prices');
               }
             }
           } catch (error) {
             console.error('Error reading cache:', error);
           }
+        } else {
+          console.log('Force refresh requested, fetching fresh prices');
         }
 
         // Show loading spinners
@@ -1242,10 +1250,10 @@
               if (priceData.discount_percent > 0) {
                 const finalPrice = (priceData.final / 100).toFixed(2);
                 const originalPrice = (priceData.initial / 100).toFixed(2);
-                priceHtml = `<span class="badge bg-danger me-1" style="font-size: 0.85rem;">SALE -${priceData.discount_percent}%</span><span class="badge bg-success" style="font-size: 0.85rem;">${currencySymbol}${finalPrice}</span><span class="badge bg-secondary text-decoration-line-through ms-1" style="font-size: 0.75rem;">${currencySymbol}${originalPrice}</span>`;
+                priceHtml = `<span class="badge bg-danger">SALE -${priceData.discount_percent}%</span><span class="badge bg-success">${currencySymbol}${finalPrice}</span><span class="badge bg-secondary text-decoration-line-through">${currencySymbol}${originalPrice}</span>`;
               } else {
                 const price = (priceData.final / 100).toFixed(2);
-                priceHtml = `<span class="badge bg-secondary" style="font-size: 0.85rem;">${currencySymbol}${price}</span>`;
+                priceHtml = `<span class="badge bg-secondary">${currencySymbol}${price}</span>`;
               }
             } else if (
               data[appId] &&
@@ -1296,6 +1304,76 @@
       document.getElementById('newsCollapse').addEventListener('hide.bs.collapse', function () {
         document.getElementById('news-chevron').style.transform = 'rotate(0deg)';
       });
+
+      // Server logs panel handlers
+      document.getElementById('logsCollapse').addEventListener('show.bs.collapse', function () {
+        document.getElementById('logs-chevron').style.transform = 'rotate(180deg)';
+        document.getElementById('logs-status').textContent = 'Expanded';
+        fetchServerLogs();
+      });
+      document.getElementById('logsCollapse').addEventListener('hide.bs.collapse', function () {
+        document.getElementById('logs-chevron').style.transform = 'rotate(0deg)';
+        document.getElementById('logs-status').textContent = 'Collapsed';
+      });
+
+      async function fetchServerLogs() {
+        const refreshBtn = document.getElementById('refresh-logs-btn');
+        const logsContainer = document.getElementById('logs-container');
+        const logsStatus = document.getElementById('logs-status');
+
+        if (refreshBtn) {
+          refreshBtn.disabled = true;
+          refreshBtn.innerHTML =
+            '<i class="bi bi-arrow-clockwise" style="animation: spin 1s linear infinite;"></i>';
+        }
+
+        logsContainer.innerHTML =
+          '<div class="text-center py-4"><div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2 text-muted">Loading server logs...</p></div>';
+
+        try {
+          const response = await fetch(CONFIG.panelUrl + '/api/server-logs?lines=50');
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+
+          const data = await response.json();
+
+          if (data.logs && data.logs.length > 0) {
+            logsContainer.innerHTML = data.logs
+              .map((line) => {
+                let colorClass = 'text-light';
+                if (line.includes('ERROR') || line.includes('Error')) {
+                  colorClass = 'text-danger';
+                } else if (line.includes('WARNING') || line.includes('Warning')) {
+                  colorClass = 'text-warning';
+                } else if (line.includes('INFO') || line.includes('Display:')) {
+                  colorClass = 'text-info';
+                }
+                return `<div class="${colorClass}" style="white-space: pre-wrap; word-break: break-all;">${line}</div>`;
+              })
+              .join('');
+            logsStatus.textContent = `${data.logs.length} lines`;
+            logsStatus.classList.remove('bg-danger');
+            logsStatus.classList.add('bg-success');
+          } else {
+            logsContainer.innerHTML = '<p class="text-muted text-center">No logs available</p>';
+            logsStatus.textContent = 'No logs';
+          }
+        } catch (error) {
+          console.error('Error fetching logs:', error);
+          logsContainer.innerHTML = `<div class="text-center text-danger"><i class="bi bi-exclamation-triangle" style="font-size: 2rem;"></i><p class="mt-2">Unable to load server logs</p><small>${error.message}</small></div>`;
+          logsStatus.textContent = 'Error';
+          logsStatus.classList.remove('bg-success');
+          logsStatus.classList.add('bg-danger');
+        }
+
+        if (refreshBtn) {
+          refreshBtn.disabled = false;
+          refreshBtn.innerHTML = '<i class="bi bi-arrow-clockwise"></i>';
+        }
+      }
+
       setTimeout(function () {
         const tooltip = document.getElementById('discord-tooltip');
         if (tooltip) {
