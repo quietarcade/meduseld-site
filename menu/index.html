@@ -1184,6 +1184,8 @@
       async function fetchGamePrices(forceRefresh = false) {
         const CACHE_KEY = 'gamePricesCache';
         const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+        const MAX_RETRIES = 3;
+        const RETRY_DELAY = 2000; // 2 seconds
 
         const refreshBtn = document.getElementById('refresh-prices-btn');
         if (refreshBtn) {
@@ -1194,16 +1196,16 @@
 
         const priceElements = document.querySelectorAll('.game-price-badge');
 
-        // Check cache first
+        // Check cache first - only use if valid data exists
         if (!forceRefresh) {
           try {
             const cached = localStorage.getItem(CACHE_KEY);
             if (cached) {
-              const { timestamp, prices, country, currency } = JSON.parse(cached);
+              const { timestamp, prices, country, currency, success } = JSON.parse(cached);
               const age = Date.now() - timestamp;
 
-              if (age < CACHE_DURATION) {
-                // Use cached data
+              // Only use cache if it was a successful fetch and not expired
+              if (age < CACHE_DURATION && success === true && Object.keys(prices).length > 0) {
                 console.log(
                   `Using cached game prices (${Math.floor(age / 1000 / 60 / 60)} hours old)`
                 );
@@ -1219,7 +1221,7 @@
                 }
                 return;
               } else {
-                console.log('Cache expired, fetching fresh prices');
+                console.log('Cache invalid or expired, fetching fresh prices');
               }
             }
           } catch (error) {
@@ -1280,69 +1282,111 @@
         }
 
         const priceCache = {};
+        let successfulFetches = 0;
+        let totalGames = priceElements.length;
 
         for (const el of priceElements) {
           const appId = el.getAttribute('data-appid');
-          try {
-            const steamApiUrl = `https://store.steampowered.com/api/appdetails?appids=${appId}&cc=${userCountry}&filters=price_overview`;
-            const response = await fetch(
-              `https://api.allorigins.win/get?url=${encodeURIComponent(steamApiUrl)}`
-            );
-            const proxyData = await response.json();
-            const data = JSON.parse(proxyData.contents);
+          let retryCount = 0;
+          let success = false;
 
-            let priceHtml = '';
-            if (
-              data[appId] &&
-              data[appId].success &&
-              data[appId].data &&
-              data[appId].data.price_overview
-            ) {
-              const priceData = data[appId].data.price_overview;
-              if (priceData.discount_percent > 0) {
-                const finalPrice = (priceData.final / 100).toFixed(2);
-                const originalPrice = (priceData.initial / 100).toFixed(2);
-                priceHtml = `<span class="badge bg-danger">SALE -${priceData.discount_percent}%</span><span class="badge bg-success">${currencySymbol}${finalPrice}</span><span class="badge bg-secondary text-decoration-line-through">${currencySymbol}${originalPrice}</span>`;
-              } else {
-                const price = (priceData.final / 100).toFixed(2);
-                priceHtml = `<span class="badge bg-secondary">${currencySymbol}${price}</span>`;
+          while (retryCount < MAX_RETRIES && !success) {
+            try {
+              const steamApiUrl = `https://store.steampowered.com/api/appdetails?appids=${appId}&cc=${userCountry}&filters=price_overview`;
+              const response = await fetch(
+                `https://api.allorigins.win/get?url=${encodeURIComponent(steamApiUrl)}`
+              );
+
+              if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
               }
-            } else if (
-              data[appId] &&
-              data[appId].success &&
-              data[appId].data &&
-              data[appId].data.is_free
-            ) {
-              priceHtml = `<span class="badge bg-success" style="font-size: 0.85rem;">FREE</span>`;
-            } else {
-              priceHtml = `<span class="badge bg-secondary" style="font-size: 0.75rem;">N/A</span>`;
-            }
 
-            el.innerHTML = priceHtml;
-            priceCache[appId] = priceHtml;
-          } catch (error) {
-            console.error(`Error fetching price for app ${appId}:`, error);
-            const errorHtml = `<span class="badge bg-secondary" style="font-size: 0.75rem;">N/A</span>`;
-            el.innerHTML = errorHtml;
-            priceCache[appId] = errorHtml;
+              const proxyData = await response.json();
+              const data = JSON.parse(proxyData.contents);
+
+              let priceHtml = '';
+              if (
+                data[appId] &&
+                data[appId].success &&
+                data[appId].data &&
+                data[appId].data.price_overview
+              ) {
+                const priceData = data[appId].data.price_overview;
+                if (priceData.discount_percent > 0) {
+                  const finalPrice = (priceData.final / 100).toFixed(2);
+                  const originalPrice = (priceData.initial / 100).toFixed(2);
+                  priceHtml = `<span class="badge bg-danger">SALE -${priceData.discount_percent}%</span><span class="badge bg-success">${currencySymbol}${finalPrice}</span><span class="badge bg-secondary text-decoration-line-through">${currencySymbol}${originalPrice}</span>`;
+                } else {
+                  const price = (priceData.final / 100).toFixed(2);
+                  priceHtml = `<span class="badge bg-secondary">${currencySymbol}${price}</span>`;
+                }
+                success = true;
+                successfulFetches++;
+              } else if (
+                data[appId] &&
+                data[appId].success &&
+                data[appId].data &&
+                data[appId].data.is_free
+              ) {
+                priceHtml = `<span class="badge bg-success" style="font-size: 0.85rem;">FREE</span>`;
+                success = true;
+                successfulFetches++;
+              } else {
+                throw new Error('Invalid price data received');
+              }
+
+              el.innerHTML = priceHtml;
+              priceCache[appId] = priceHtml;
+            } catch (error) {
+              retryCount++;
+              console.error(
+                `Error fetching price for app ${appId} (attempt ${retryCount}/${MAX_RETRIES}):`,
+                error
+              );
+
+              if (retryCount < MAX_RETRIES) {
+                console.log(`Retrying in ${RETRY_DELAY / 1000} seconds...`);
+                await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY));
+              } else {
+                // Max retries reached, show error
+                const errorHtml = `<span class="badge bg-warning text-dark" style="font-size: 0.75rem;" title="Failed to fetch price">N/A</span>`;
+                el.innerHTML = errorHtml;
+                console.error(
+                  `Failed to fetch price for app ${appId} after ${MAX_RETRIES} attempts`
+                );
+              }
+            }
           }
-          await new Promise((resolve) => setTimeout(resolve, 300));
+
+          // Small delay between games to avoid rate limiting
+          if (success) {
+            await new Promise((resolve) => setTimeout(resolve, 300));
+          }
         }
 
-        // Save to cache
-        try {
-          localStorage.setItem(
-            CACHE_KEY,
-            JSON.stringify({
-              timestamp: Date.now(),
-              prices: priceCache,
-              country: userCountry,
-              currency: currencySymbol,
-            })
-          );
-          console.log('Game prices cached successfully');
-        } catch (error) {
-          console.error('Error saving cache:', error);
+        // Only save to cache if we successfully fetched at least some prices
+        if (successfulFetches > 0) {
+          try {
+            localStorage.setItem(
+              CACHE_KEY,
+              JSON.stringify({
+                timestamp: Date.now(),
+                prices: priceCache,
+                country: userCountry,
+                currency: currencySymbol,
+                success: true,
+                successfulFetches: successfulFetches,
+                totalGames: totalGames,
+              })
+            );
+            console.log(
+              `Game prices cached successfully (${successfulFetches}/${totalGames} games)`
+            );
+          } catch (error) {
+            console.error('Error saving cache:', error);
+          }
+        } else {
+          console.warn('No prices fetched successfully, not caching');
         }
 
         if (refreshBtn) {
