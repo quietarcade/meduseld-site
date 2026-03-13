@@ -28,6 +28,49 @@ body {
   margin: 0;
 }
 
+/* Cursor styles */
+* {
+  cursor: default;
+}
+
+button,
+a,
+.btn,
+input[type='button'],
+input[type='submit'],
+[onclick],
+[data-bs-toggle],
+[data-bs-target],
+.badge[onclick],
+.service-card,
+[role='button'],
+label[for],
+.card-header[data-bs-toggle],
+.clickable {
+  cursor: pointer !important;
+}
+
+select,
+textarea,
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='search'],
+input[type='number'] {
+  cursor: text !important;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  cursor: pointer !important;
+}
+
+.disabled,
+[disabled],
+.btn-disabled-link {
+  cursor: not-allowed !important;
+}
+
 header {
   padding-top: calc(15px + env(safe-area-inset-top));
 }
