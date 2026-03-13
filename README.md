@@ -1,4 +1,4 @@
-# Meduseld Menu Site
+# Meduseld service Site
 
 Service hub for managing game servers, media streaming, and other services hosted on meduseld.io.
 
@@ -58,7 +58,7 @@ git checkout -b feature/your-feature-name
 
 Edit files as needed:
 
-- `menu/index.html` - Main menu page
+- `service/index.html` - Main service page
 - `static/` - Static assets
 
 ### 4. Commit and Push Your Branch
@@ -90,7 +90,7 @@ Changes are live immediately (static site).
 
 ## Configuration
 
-The site uses a configuration object in `menu/index.html`:
+The site uses a configuration object in `service/index.html`:
 
 ```javascript
 const CONFIG = {

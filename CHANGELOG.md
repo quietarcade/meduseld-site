@@ -4,9 +4,10 @@ All notable changes to the Meduseld services hub.
 
 ## [0.1.0-alpha] - 2026-03-10
 
-Initial release of the Meduseld menu site.
+Initial release of the Meduseld service site.
 
 ### Features
+
 - Service hub with real-time status monitoring for game server, SSH, and Jellyfin
 - Game news panel with Steam API integration (collapsible)
 - Games Up Next list with Steam pricing and sale badges
@@ -20,6 +21,7 @@ Initial release of the Meduseld menu site.
 - Hall of Fame placeholder (coming soon)
 
 ### UI/UX
+
 - Responsive Bootstrap 5 design
 - Status indicators with color coding (green/orange/red)
 - Cloudflare tunnel status detection
@@ -29,6 +31,7 @@ Initial release of the Meduseld menu site.
 - Profile container with authentication
 
 ### Technical
+
 - Health check API integration via Cloudflare Worker
 - Steam API integration for news and pricing
 - CORS proxy using allorigins.win
@@ -39,18 +42,21 @@ Initial release of the Meduseld menu site.
 ## Recent Updates (Pre-Release)
 
 ### Services
+
 - Added Jellyfin media server integration with status monitoring
 - Enabled real-time status checks for game server panel
 - Enabled SSH terminal access with availability monitoring
 - Integrated Steam news feed for current game
 
 ### UI/UX Improvements
+
 - Fixed game server panel title to display "{Game Name} Server" format
 - Made tooltips clickable on mobile devices for better accessibility
 - Added Bootstrap tooltip support with click and hover triggers
 - Improved mobile experience for info icons and status badges
 
 ### Features
+
 - Automatic service status checks every 30 seconds
 - Collapsible game news panel with Steam API integration
 - Server specifications display
@@ -58,6 +64,7 @@ Initial release of the Meduseld menu site.
 - Discord integration widget
 
 ### Technical
+
 - Status monitoring using fetch with timeout controls
 - No-CORS mode for cross-origin status checks
 - Responsive design with Bootstrap 5.3.2
