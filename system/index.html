@@ -181,6 +181,14 @@
 
           const data = await response.json();
 
+          if (data.error) {
+            logsContainer.innerHTML = `<div class="text-center text-warning"><i class="cil-warning" style="font-size: 2rem;"></i><p class="mt-2">Unable to load server logs</p><small class="text-muted">${data.error}</small><p class="mt-3 text-info" style="font-size: 0.9rem;">The Flask app may need permission to read /var/log/syslog or the file may not exist.</p></div>`;
+            logsStatus.textContent = 'Error';
+            logsStatus.classList.remove('bg-success', 'bg-secondary');
+            logsStatus.classList.add('bg-warning');
+            return;
+          }
+
           if (data.logs && data.logs.length > 0) {
             logsContainer.innerHTML = data.logs
               .map((line) => {
@@ -209,7 +217,7 @@
           }
         } catch (error) {
           console.error('Error fetching logs:', error);
-          logsContainer.innerHTML = `<div class="text-center text-danger"><i class="cil-warning" style="font-size: 2rem;"></i><p class="mt-2">Unable to load server logs</p><small>${error.message}</small></div>`;
+          logsContainer.innerHTML = `<div class="text-center text-danger"><i class="cil-warning" style="font-size: 2rem;"></i><p class="mt-2">Unable to load server logs</p><small class="text-muted">${error.message}</small><p class="mt-3 text-info" style="font-size: 0.9rem;">Note: System logs require read permissions on /var/log/syslog</p></div>`;
           logsStatus.textContent = 'Error';
           logsStatus.classList.remove('bg-success', 'bg-secondary');
           logsStatus.classList.add('bg-danger');
