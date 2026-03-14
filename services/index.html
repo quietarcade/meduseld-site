@@ -674,11 +674,7 @@
         </div>
       </div>
     </div>
-    <!-- Discord Tooltip -->
-    <div class="discord-tooltip" id="discord-tooltip">
-      <i class="bi bi-chat-left-text-fill me-2"></i>
-      Server suggestion or problem? Send a Discord message!
-    </div>
+
     <!-- Footer -->
     <footer class="text-center py-3 mt-auto" style="border-top: 1px solid rgba(230, 198, 92, 0.2)">
       <p class="text-light mb-0" style="font-size: 0.85rem">
@@ -761,76 +757,10 @@
       .collapse.show ~ .card-header #news-chevron {
         transform: rotate(180deg);
       }
-      .discord-tooltip {
-        position: fixed;
-        bottom: 80px;
-        right: 20px;
-        background: #e6c65c;
-        color: #000;
-        padding: 12px 16px;
-        border-radius: 8px;
-        border: 2px solid #000;
-        font-size: 0.9rem;
-        font-weight: 500;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        z-index: 9999;
-        max-width: 250px;
-        display: none;
-      }
-      .discord-tooltip::after {
-        content: '';
-        position: absolute;
-        bottom: -10px;
-        right: 20px;
-        width: 0;
-        height: 0;
-        border-left: 8px solid transparent;
-        border-right: 8px solid transparent;
-        border-top: 10px solid #000;
-      }
-      .discord-tooltip::before {
-        content: '';
-        position: absolute;
-        bottom: -7px;
-        right: 22px;
-        width: 0;
-        height: 0;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-top: 7px solid #e6c65c;
-        z-index: 1;
-      }
-      @keyframes fadeInBounce {
-        0% {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        60% {
-          opacity: 1;
-          transform: translateY(-5px);
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
 
 
-      @media (max-width: 768px) {
-        .discord-tooltip {
-          bottom: 70px;
-          right: 10px;
-          max-width: 200px;
-          font-size: 0.8rem;
-          padding: 10px 12px;
-        }
-        .discord-tooltip::after {
-          right: 14px;
-        }
-        .discord-tooltip::before {
-          right: 16px;
-        }
-      }
+
+
       /* Profile Container Responsive Styles */
       @media (max-width: 768px) {
         #profile-container {
@@ -1519,33 +1449,21 @@
         }
       }
 
-      setTimeout(function () {
-        const tooltip = document.getElementById('discord-tooltip');
-        if (tooltip) {
-          tooltip.style.display = 'block';
-          tooltip.style.animation = 'fadeInBounce 0.5s ease-out forwards';
-          setTimeout(function () {
-            tooltip.style.transition = 'opacity 0.5s ease-out';
-            tooltip.style.opacity = '0';
-            setTimeout(function () {
-              tooltip.style.display = 'none';
-            }, 500);
-          }, 8000);
-        }
-      }, 3000);
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3" async defer></script>
     <script>
-      // Initialize Widgetbot Crate
       async function initWidgetbot() {
-        new Crate({
+        const crate = new Crate({
           server: '924788704529252353',
           channel: '1474674474036232204',
           color: '#e6c65c',
         });
+        setTimeout(() => {
+          crate.notify('Server suggestion or problem? Send a Discord message!');
+        }, 3000);
       }
 
-      // Wait for Widgetbot library to load, then initialize
       if (typeof Crate !== 'undefined') {
         initWidgetbot();
       } else {
