@@ -709,45 +709,7 @@
       </p>
     </footer>
     <style>
-      .service-card {
-        cursor: pointer;
-        transition:
-          transform 0.2s ease,
-          box-shadow 0.2s ease;
-        border-width: 2px;
-      }
-      .service-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(230, 198, 92, 0.3);
-      }
-      .disabled-card {
-        opacity: 0.6;
-        border-width: 2px;
-      }
-      .btn-disabled-link {
-        pointer-events: none;
-        cursor: not-allowed !important;
-      }
-      .status-online {
-        animation: pulse 2s ease-in-out infinite;
-      }
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.6;
-        }
-      }
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
+
       .news-item:last-child {
         border-bottom: none !important;
       }
@@ -770,9 +732,6 @@
       .collapse.show ~ .card-header #news-chevron {
         transform: rotate(180deg);
       }
-
-
-
 
       /* Profile Container Responsive Styles */
       @media (max-width: 768px) {
@@ -1392,8 +1351,6 @@
       document.getElementById('newsCollapse').addEventListener('hide.bs.collapse', function () {
         document.getElementById('news-chevron').style.transform = 'rotate(0deg)';
       });
-
-
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3" async defer></script>

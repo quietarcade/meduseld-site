@@ -174,14 +174,6 @@ header {
   box-shadow: 0 0 20px rgba(201, 162, 39, 0.35);
 }
 
-/* Disabled state */
-.control-card.disabled {
-  opacity: 0.35;
-  pointer-events: none;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
 /* ACTIVE STATES */
 .control-start {
   background: #1f4d2b !important;
@@ -203,10 +195,11 @@ header {
   /* royal purple */
 }
 
-/* Disabled */
 .control-card.disabled {
   opacity: 0.35;
   pointer-events: none;
+  cursor: not-allowed !important;
+  box-shadow: none;
   filter: grayscale(50%);
 }
 
@@ -281,5 +274,52 @@ body {
 
   .game-price-badge .badge {
     font-size: 0.7rem !important;
+  }
+}
+
+/* Service cards */
+.service-card {
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  border-width: 2px;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(230, 198, 92, 0.3);
+}
+
+.disabled-card {
+  opacity: 0.6;
+  border-width: 2px;
+}
+
+.btn-disabled-link {
+  pointer-events: none;
+  cursor: not-allowed !important;
+}
+
+.status-online {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
