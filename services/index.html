@@ -102,7 +102,7 @@
                   Checking...
                 </span>
               </div>
-              <p class="card-text mb-4 flex-grow-1" id="game-description">
+              <p class="card-text mb-0 flex-grow-1" id="game-description">
                 Control the Icarus dedicated game server. Start, stop, restart, and monitor server
                 status.
               </p>
@@ -153,7 +153,7 @@
                   Checking...
                 </span>
               </div>
-              <p class="card-text mb-4 flex-grow-1">
+              <p class="card-text mb-0 flex-grow-1">
                 Secure shell access to the server. Connect via web terminal.
               </p>
               <div class="mt-auto">
@@ -184,7 +184,7 @@
                   Checking...
                 </span>
               </div>
-              <p class="card-text mb-4 flex-grow-1" id="jellyfin-description">
+              <p class="card-text mb-0 flex-grow-1" id="jellyfin-description">
                 Stream movies, TV shows, and media from our Palantír server.
               </p>
               <div class="mt-auto">
@@ -218,7 +218,7 @@
         <div class="col-md-6 col-lg-4">
           <div class="card h-100 text-white bg-dark border-secondary disabled-card">
             <div class="card-body d-flex flex-column text-center p-4">
-              <div class="mb-3"><i class="bi bi-lock" style="font-size: 3rem"></i></div>
+              <div class="mb-3"><i class="bi bi-shield-lock" style="font-size: 3rem"></i></div>
               <h3 class="card-title mb-3 text-secondary">VPN Access</h3>
               <p class="card-text mb-4 flex-grow-1">
                 Secure VPN connection using OpenVPN for remote access.
@@ -1385,41 +1385,38 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3" async defer></script>
     <script>
-      async function initWidgetbot() {
-        new Crate({
-          server: '924788704529252353',
-          channel: '1474674474036232204',
-          color: '#e6c65c',
-        });
-
-        // Custom speech bubble anchored to the Crate button
-        setTimeout(function () {
-          var bubble = document.createElement('div');
-          bubble.id = 'discord-bubble';
-          bubble.innerHTML = '<i class="bi bi-chat-left-text-fill me-2"></i>Server suggestion or problem? Send a Discord message!';
-          bubble.style.cssText = 'position:fixed;bottom:80px;right:20px;background:#e6c65c;color:#000;padding:12px 16px;border-radius:8px;font-size:0.9rem;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:9998;max-width:250px;opacity:0;transition:opacity 0.5s ease;';
-          document.body.appendChild(bubble);
-
-          // Fade in
-          requestAnimationFrame(function () {
-            bubble.style.opacity = '1';
+      // Initialize Widgetbot Crate
+      function initWidgetbot() {
+        try {
+          new Crate({
+            server: '924788704529252353',
+            channel: '1474674474036232204',
+            color: '#e6c65c',
           });
-
-          // Fade out after 8 seconds
-          setTimeout(function () {
-            bubble.style.opacity = '0';
-            setTimeout(function () {
-              bubble.remove();
-            }, 500);
-          }, 8000);
-        }, 3000);
+        } catch (e) {
+          console.error('Widgetbot Crate failed to init:', e);
+        }
       }
-
       if (typeof Crate !== 'undefined') {
         initWidgetbot();
       } else {
         window.addEventListener('load', initWidgetbot);
       }
+
+      // Speech bubble - runs independently of Widgetbot
+      setTimeout(function () {
+        var bubble = document.createElement('div');
+        bubble.innerHTML = '<i class="bi bi-chat-left-text-fill" style="margin-right:8px"></i>Server suggestion or problem? Send a Discord message!';
+        bubble.style.cssText = 'position:fixed;bottom:80px;right:20px;background:#e6c65c;color:#000;padding:12px 16px;border-radius:8px;font-size:0.9rem;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:9998;max-width:250px;opacity:0;transition:opacity 0.5s ease;pointer-events:none;';
+        document.body.appendChild(bubble);
+        requestAnimationFrame(function () {
+          bubble.style.opacity = '1';
+        });
+        setTimeout(function () {
+          bubble.style.opacity = '0';
+          setTimeout(function () { bubble.remove(); }, 500);
+        }, 8000);
+      }, 3000);
     </script>
   </body>
 </html>

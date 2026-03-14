@@ -46,20 +46,20 @@ When making changes to this repository, you MUST use the following commit format
 ## Examples
 
 ```bash
-feat(services): integrate Steam news feed
-fix(system): resolve log loading error
-style(footer): update copyright year
-refactor(ui): consolidate button styles
-perf(prices): implement price caching
-docs(readme): add setup instructions
-chore(deps): update Bootstrap to 5.3.3
+feat(services): Integrate Steam news feed
+fix(system): Resolve log loading error
+style(footer): Update copyright year
+refactor(ui): Consolidate button styles
+perf(prices): Implement price caching
+docs(readme): Add setup instructions
+chore(deps): Update Bootstrap to 5.3.3
 ```
 
 ## Rules
 
-1. **Subject line**: Max 100 characters, sentence case, no period at end
+1. **Subject line**: Max 100 characters, MUST be Sentence case (first letter capitalized), no period at end
 2. **Scope**: Always include a scope (required by commitlint)
-3. **Body**: Optional, use for detailed explanations
+3. **Body**: Optional, use for detailed explanations. Body lines also must be Sentence case and max 100 chars each
 4. **Footer**: Optional, use for breaking changes or issue references
 
 ## Breaking Changes
