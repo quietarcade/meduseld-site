@@ -772,7 +772,6 @@
         z-index: 9999;
         max-width: 250px;
         display: none;
-        opacity: 0;
       }
       .discord-tooltip::after {
         content: '';
@@ -812,15 +811,7 @@
         }
       }
 
-      .discord-tooltip.visible {
-        display: block;
-        animation: fadeInBounce 0.5s ease-out forwards;
-      }
-      .discord-tooltip.fade-out {
-        animation: none;
-        opacity: 0;
-        transition: opacity 0.5s ease-out;
-      }
+
       @media (max-width: 768px) {
         .discord-tooltip {
           bottom: 70px;
@@ -1527,11 +1518,13 @@
       setTimeout(function () {
         const tooltip = document.getElementById('discord-tooltip');
         if (tooltip) {
-          tooltip.classList.add('visible');
+          tooltip.style.display = 'block';
+          tooltip.style.animation = 'fadeInBounce 0.5s ease-out forwards';
           setTimeout(function () {
-            tooltip.classList.add('fade-out');
+            tooltip.style.transition = 'opacity 0.5s ease-out';
+            tooltip.style.opacity = '0';
             setTimeout(function () {
-              tooltip.classList.remove('visible', 'fade-out');
+              tooltip.style.display = 'none';
             }, 500);
           }, 8000);
         }
