@@ -771,7 +771,8 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         z-index: 9999;
         max-width: 250px;
-        animation: fadeInBounce 0.5s ease-out;
+        display: none;
+        opacity: 0;
       }
       .discord-tooltip::after {
         content: '';
@@ -811,6 +812,29 @@
         }
       }
 
+      .discord-tooltip.visible {
+        display: block;
+        animation: fadeInBounce 0.5s ease-out forwards;
+      }
+      .discord-tooltip.fade-out {
+        opacity: 0;
+        transition: opacity 0.5s ease-out;
+      }
+      @media (max-width: 768px) {
+        .discord-tooltip {
+          bottom: 70px;
+          right: 10px;
+          max-width: 200px;
+          font-size: 0.8rem;
+          padding: 10px 12px;
+        }
+        .discord-tooltip::after {
+          right: 14px;
+        }
+        .discord-tooltip::before {
+          right: 16px;
+        }
+      }
       /* Profile Container Responsive Styles */
       @media (max-width: 768px) {
         #profile-container {
@@ -1502,12 +1526,11 @@
       setTimeout(function () {
         const tooltip = document.getElementById('discord-tooltip');
         if (tooltip) {
-          tooltip.style.display = 'block';
+          tooltip.classList.add('visible');
           setTimeout(function () {
-            tooltip.style.opacity = '0';
-            tooltip.style.transition = 'opacity 0.5s ease-out';
+            tooltip.classList.add('fade-out');
             setTimeout(function () {
-              tooltip.style.display = 'none';
+              tooltip.classList.remove('visible', 'fade-out');
             }, 500);
           }, 8000);
         }
