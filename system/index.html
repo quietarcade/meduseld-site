@@ -95,10 +95,13 @@
           </div>
         </div>
         <div class="row justify-content-center mt-4">
-          <div class="col-12 col-lg-8 d-flex justify-content-center">
+          <div class="col-12 col-lg-8 d-flex justify-content-center gap-3">
             <a href="https://trello.com/b/9hN0SOQP/meduseld" target="_blank" class="btn btn-outline-warning">
               <i class="bi bi-kanban me-2"></i>Trello Board
             </a>
+            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#rebootModal">
+              <i class="bi bi-power me-2"></i>Reboot Server
+            </button>
           </div>
         </div>
       </div>
@@ -142,10 +145,42 @@
 
     </style>
 
+    <!-- Reboot Confirmation Modal -->
+    <div class="modal fade" id="rebootModal" tabindex="-1" aria-labelledby="rebootModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light border-danger">
+          <div class="modal-header" style="border-bottom: 2px solid #dc3545">
+            <h5 class="modal-title" id="rebootModalLabel" style="color: #dc3545">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              System Reboot
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-danger d-flex align-items-start" role="alert">
+              <i class="bi bi-exclamation-octagon-fill me-3" style="font-size: 1.5rem; flex-shrink: 0;"></i>
+              <div>
+                <strong>Warning:</strong> This will completely shut down and restart the server. All running services including the game server, Jellyfin, and SSH will go offline. Only use this as a last resort when the server is unresponsive.
+              </div>
+            </div>
+            <p class="text-light mb-0" style="opacity: 0.85;">The server will take a few minutes to come back online after rebooting.</p>
+          </div>
+          <div class="modal-footer" style="border-top: 1px solid rgba(220, 53, 69, 0.3)">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" id="confirm-reboot-btn" onclick="executeReboot()">
+              <i class="bi bi-power me-2"></i>Confirm Reboot
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       const CONFIG = {
         panelUrl: 'https://panel.meduseld.io',
+        rebootUrl: 'https://reboot.meduseld.io',
+        rebootToken: 'CHANGE_ME',
       };
 
       async function fetchServerLogs() {
@@ -226,6 +261,49 @@
         // Auto-refresh every 30 seconds
         setInterval(fetchServerLogs, 30000);
       });
+
+      async function executeReboot() {
+        const btn = document.getElementById('confirm-reboot-btn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Rebooting...';
+
+        try {
+          const response = await fetch(CONFIG.rebootUrl + '/reboot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: CONFIG.rebootToken }),
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            btn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Reboot Sent';
+            btn.classList.remove('btn-danger');
+            btn.classList.add('btn-success');
+            // Update the logs status to show server is going down
+            const logsStatus = document.getElementById('logs-status');
+            if (logsStatus) {
+              logsStatus.textContent = 'Rebooting...';
+              logsStatus.classList.remove('bg-success', 'bg-secondary');
+              logsStatus.classList.add('bg-warning');
+            }
+          } else {
+            btn.innerHTML = '<i class="bi bi-x-circle me-2"></i>Failed: ' + (data.error || 'Unknown error');
+            btn.disabled = false;
+            setTimeout(() => {
+              btn.innerHTML = '<i class="bi bi-power me-2"></i>Confirm Reboot';
+              btn.classList.remove('btn-success');
+              btn.classList.add('btn-danger');
+            }, 3000);
+          }
+        } catch (error) {
+          btn.innerHTML = '<i class="bi bi-x-circle me-2"></i>Connection Failed';
+          btn.disabled = false;
+          setTimeout(() => {
+            btn.innerHTML = '<i class="bi bi-power me-2"></i>Confirm Reboot';
+          }, 3000);
+        }
+      }
     </script>
   </body>
 </html>
